@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Mail, Lock, LogIn, ShieldCheck, HeartPulse, TrendingUp, ShieldPlus } from 'lucide-react'
+import { Mail, Lock, LogIn, ShieldCheck, HeartPulse, TrendingUp, ShieldPlus, Eye, EyeOff } from 'lucide-react'
 import Logo from '../components/Logo'
 import { useAuth } from '../context/AuthContext'
 
@@ -9,6 +9,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [motDePasse, setMotDePasse] = useState('')
+  const [motDePasseVisible, setMotDePasseVisible] = useState(false)
   const [erreur, setErreur] = useState('')
   const [envoiEnCours, setEnvoiEnCours] = useState(false)
 
@@ -60,13 +61,21 @@ export default function LoginPage() {
               <div className="mt-1 flex items-center gap-2 border border-grismoyen/50 rounded-lg px-3 py-2.5 focus-within:border-primary">
                 <Lock size={18} className="text-grismoyen" />
                 <input
-                  type="password"
+                  type={motDePasseVisible ? 'text' : 'password'}
                   required
                   value={motDePasse}
                   onChange={(e) => setMotDePasse(e.target.value)}
                   placeholder="Entrez votre mot de passe"
                   className="w-full outline-none text-sm"
                 />
+                <button
+                  type="button"
+                  onClick={() => setMotDePasseVisible((v) => !v)}
+                  className="text-grismoyen hover:text-grisfonce"
+                  aria-label={motDePasseVisible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                >
+                  {motDePasseVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
               <div className="text-right mt-1">
                 <span className="text-xs text-primary cursor-not-allowed opacity-70">
