@@ -16,7 +16,6 @@ export default function ProfilePage() {
     sexe: utilisateur?.sexe || '',
     date_naissance: utilisateur?.date_naissance || '',
     taille_cm: utilisateur?.taille_cm ?? '',
-    poids_kg: utilisateur?.poids_kg ?? '',
   })
   const [messageProfil, setMessageProfil] = useState('')
   const [enregistrementProfil, setEnregistrementProfil] = useState(false)
@@ -38,7 +37,6 @@ export default function ProfilePage() {
         sexe: formProfil.sexe || undefined,
         date_naissance: formProfil.date_naissance || undefined,
         taille_cm: formProfil.taille_cm !== '' ? Number(formProfil.taille_cm) : undefined,
-        poids_kg: formProfil.poids_kg !== '' ? Number(formProfil.poids_kg) : undefined,
       }
       const profilMisAJour = await modifierProfil(donnees)
       mettreAJourUtilisateur(profilMisAJour)
@@ -152,21 +150,10 @@ export default function ProfilePage() {
                 className={`${styleInput} mt-1`}
               />
             </div>
-            <div>
-              <label className="text-sm font-medium text-grisfonce">Poids (kg)</label>
-              <input
-                type="number"
-                required
-                min={30}
-                max={200}
-                value={formProfil.poids_kg}
-                onChange={(e) => setFormProfil((f) => ({ ...f, poids_kg: e.target.value }))}
-                className={`${styleInput} mt-1`}
-              />
-            </div>
           </div>
           <p className="text-xs text-grismoyen">
-            Ces informations sont utilisées automatiquement lors de vos prédictions.
+            Ces informations sont utilisées automatiquement lors de vos prédictions. Le poids se
+            renseigne à chaque nouvelle analyse, car il évolue dans le temps.
           </p>
           <div>
             <label className="text-sm font-medium text-grisfonce flex items-center gap-1">

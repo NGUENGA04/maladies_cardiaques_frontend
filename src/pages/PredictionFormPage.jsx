@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { creerPrediction } from '../api/services'
 
 const VALEURS_INITIALES = {
+  poids_kg: '',
   tension_systolique_mmHg: '',
   tension_diastolique_mmHg: '',
   cholesterol_total_mgdl: '',
@@ -30,12 +31,7 @@ function ageDepuisDateNaissance(dateNaissance) {
 }
 
 function profilEstComplet(utilisateur) {
-  return Boolean(
-    utilisateur?.sexe &&
-      utilisateur?.date_naissance &&
-      utilisateur?.taille_cm &&
-      utilisateur?.poids_kg
-  )
+  return Boolean(utilisateur?.sexe && utilisateur?.date_naissance && utilisateur?.taille_cm)
 }
 
 function Champ({ label, aide, children }) {
@@ -88,7 +84,7 @@ export default function PredictionFormPage() {
       age: Number(age),
       sexe: utilisateur.sexe,
       taille_cm: Number(utilisateur.taille_cm),
-      poids_kg: Number(utilisateur.poids_kg),
+      poids_kg: Number(form.poids_kg),
       tension_systolique_mmHg: Number(form.tension_systolique_mmHg),
       tension_diastolique_mmHg: Number(form.tension_diastolique_mmHg),
       cholesterol_total_mgdl: Number(form.cholesterol_total_mgdl),
@@ -119,8 +115,8 @@ export default function PredictionFormPage() {
             Complétez votre profil avant de lancer une prédiction
           </p>
           <p className="text-sm text-grismoyen mt-1 max-w-md mx-auto">
-            Le sexe, la date de naissance, la taille et le poids sont nécessaires à l'analyse et
-            se renseignent depuis votre profil.
+            Le sexe, la date de naissance et la taille sont nécessaires à l'analyse et se
+            renseignent depuis votre profil.
           </p>
           <Link
             to="/profil"
@@ -159,7 +155,7 @@ export default function PredictionFormPage() {
               className="text-xs text-primary bg-primary-light px-2.5 py-1 rounded-full flex items-center gap-1 hover:opacity-80"
             >
               <Lock size={11} />
-              Modifiable dans votre profil
+              Âge, sexe et taille modifiables dans votre profil
             </Link>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -172,8 +168,12 @@ export default function PredictionFormPage() {
             <Champ label="Taille (cm)">
               <input type="text" disabled value={utilisateur.taille_cm} className={styleInputLecture} />
             </Champ>
-            <Champ label="Poids (kg)">
-              <input type="text" disabled value={utilisateur.poids_kg} className={styleInputLecture} />
+            <Champ label="Poids (kg)" aide="Se renseigne à chaque analyse, contrairement aux autres informations personnelles">
+              <input
+                type="number" required min={30} max={200} placeholder="Ex : 70"
+                value={form.poids_kg} onChange={(e) => majChamp('poids_kg', e.target.value)}
+                className={styleInput}
+              />
             </Champ>
           </div>
         </Card>

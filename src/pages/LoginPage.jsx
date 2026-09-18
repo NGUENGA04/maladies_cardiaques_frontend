@@ -18,12 +18,16 @@ export default function LoginPage() {
     setErreur('')
     setEnvoiEnCours(true)
     try {
-      await connecter(email, motDePasse)
+      await connecter(email.trim().toLowerCase(), motDePasse)
       navigate('/tableau-de-bord')
     } catch (err) {
-      setErreur(
-        err.response?.data?.detail || "Impossible de se connecter. Vérifiez vos identifiants."
-      )
+      if (err.response) {
+        setErreur(err.response.data?.detail || "Adresse e-mail ou mot de passe incorrect.")
+      } else {
+        setErreur(
+          "Impossible de joindre le serveur. Vérifiez votre connexion internet et réessayez (le serveur peut mettre jusqu'à une minute à démarrer après une période d'inactivité)."
+        )
+      }
     } finally {
       setEnvoiEnCours(false)
     }
@@ -48,6 +52,9 @@ export default function LoginPage() {
                 <input
                   type="email"
                   required
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Entrez votre adresse e-mail"
@@ -63,6 +70,9 @@ export default function LoginPage() {
                 <input
                   type={motDePasseVisible ? 'text' : 'password'}
                   required
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   value={motDePasse}
                   onChange={(e) => setMotDePasse(e.target.value)}
                   placeholder="Entrez votre mot de passe"
