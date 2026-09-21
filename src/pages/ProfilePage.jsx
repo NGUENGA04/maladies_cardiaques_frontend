@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { User, Mail, Lock, ShieldCheck, Save } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { User, Mail, Lock, ShieldCheck, Save, LogOut } from 'lucide-react'
 import Card from '../components/Card'
 import { useAuth } from '../context/AuthContext'
 import { modifierProfil, changerMotDePasse } from '../api/services'
@@ -8,7 +9,13 @@ const styleInput =
   'w-full border border-grismoyen/50 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-primary bg-white'
 
 export default function ProfilePage() {
-  const { utilisateur, mettreAJourUtilisateur } = useAuth()
+  const { utilisateur, mettreAJourUtilisateur, deconnecter } = useAuth()
+  const navigate = useNavigate()
+
+  function handleDeconnexion() {
+    deconnecter()
+    navigate('/connexion')
+  }
 
   const [formProfil, setFormProfil] = useState({
     prenom: utilisateur?.prenom || '',
@@ -226,6 +233,16 @@ export default function ProfilePage() {
           <ShieldCheck size={14} />
           Authentification à deux facteurs — bientôt disponible
         </div>
+      </Card>
+
+      <Card className="md:hidden">
+        <button
+          onClick={handleDeconnexion}
+          className="w-full flex items-center justify-center gap-2 text-red-500 font-medium py-2 hover:bg-red-50 rounded-lg"
+        >
+          <LogOut size={18} />
+          Déconnexion
+        </button>
       </Card>
     </div>
   )
